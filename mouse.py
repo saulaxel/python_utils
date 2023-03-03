@@ -1,3 +1,4 @@
+import time
 import curses
 import pyautogui as pgui
 from string import ascii_letters
@@ -63,6 +64,9 @@ def main(stdscr):
 
     offsets_by_code = generate_offsets_by_code(movement_options)
 
+    point_a = None
+    point_b = None
+
     c = stdscr.getch()
     while c != ord('q'):
 
@@ -77,6 +81,23 @@ def main(stdscr):
             pgui.click(button='right')
         elif c in (ord('R'), ord('M')):
             pgui.click(button='right', clicks=2)
+        elif c in (ord('u'), ord('z')):
+            point_a = pgui.position()
+            stdscr.clear()
+            stdscr.addstr(1, 1, 'Point a was set to {}'.format(point_a))
+        elif c in (ord('o'), ord('c')):
+            point_b = pgui.position()
+            stdscr.clear()
+            stdscr.addstr(1, 1, 'Point b was set to {}'.format(point_b))
+        elif c in (ord('x'), ord('i')):
+            point_a, point_b = point_b, point_a
+            stdscr.clear()
+            stdscr.addstr(1, 1, 'Points swapped: point_a={} point_b={}'.
+                          format(point_a, point_b))
+        elif c in (ord('b'), ord('r')):
+            pgui.moveTo(point_a)
+            pgui.dragTo(point_b.x, point_b.y, 1)
+
 
         c = stdscr.getch()
 
